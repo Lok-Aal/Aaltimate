@@ -11,28 +11,35 @@
   <header><div id="logo">Telefonparser</div></header>
   <main>
     <div class="grid">
-
     <p-card class="col-6">
-      <form>
+      <form name="parsenumber">
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon">
             <i class="pi pi-phone"></i>
           </span>
-          <input pInputText placeholder="Telefonnummer" />
+          <input pInputText name="inputNumber" [(ngModel)]="inputNumber" placeholder="Telefonnummer" />
         </div>
         <p-divider></p-divider>
-          <p-button label="Parse" class="p-button-raised p-button-rounded p-button-success md-5"></p-button>
+          <p-button (click)="parseNumber()" label="Parse" class="p-button-raised p-button-rounded p-button-success md-5"></p-button>
       </form>
     </p-card>
 
-    <p-card>
-  <p-table>
-    <ng-template pTemplate="header">
+    <p-card class="col-6">
+  <p-table [value]="parsedNumbers">
+    <ng-template  pTemplate="header">
       <tr>
         <th>Landesvorwahl</th>
         <th>Ortsvorwahl</th>
         <th>Hauptwahl</th>
         <th>Durchwahl</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData>
+      <tr>
+        <td>{{rowData.landesvorwahl}}</td>
+        <td>{{rowData.ortsvorwahl}}d</td>
+        <td>{{rowData.hauptwahl}}</td>
+        <td>{{rowData.durchwahl ?? "-"}}</td>
       </tr>
     </ng-template>
   </p-table>      

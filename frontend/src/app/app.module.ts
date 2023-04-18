@@ -10,7 +10,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { DividerModule } from 'primeng/divider';
 import { ButtonModule } from 'primeng/button';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent
@@ -18,6 +19,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
   imports: [
     BrowserModule,
     TableModule,
+    FormsModule,
     DividerModule,
     NgbModule,
     ButtonModule,

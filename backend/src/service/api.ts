@@ -27,10 +27,14 @@ export class ApiService {
         app.get('/parseNumber', async (req, res) => {
             let number = req.query.number;
             if (number !== undefined && typeof(number) === "string") {
-                let phoneNumber: PhoneNumber = parsePhoneNumber(number); 
-                res.status(200).json({ phoneNumber: phoneNumber });
+                let phoneNumber: PhoneNumber | null = parsePhoneNumber(number); 
+                if (phoneNumber !== null) {
+                    res.status(200).json({ phoneNumber: phoneNumber });
+                } else {
+                    res.status(400).json({ error: "invalid phone number" });
+                }
             } else {
-                res.status(400).json({ error: "wrong input" });
+                res.status(400).json({ error: "invalid input" });
             }
         });
     }
