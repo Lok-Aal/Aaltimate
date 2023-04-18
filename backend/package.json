@@ -4,7 +4,8 @@
   "description": "",
   "main": "src/app.ts",
   "scripts": {
-    "start": "npx tsc && node dist/app.js"
+    "start": "npx tsc && node dist/app.js",
+    "test" : "npx karma start"
   },
   "keywords": [],
   "author": "",
