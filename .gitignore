@@ -3,6 +3,7 @@ notes.txt
 config.yml
 *.js
 *.js.map
+!*.conf.js
 
 # Logs
 logs
