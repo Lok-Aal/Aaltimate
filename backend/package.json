@@ -11,6 +11,12 @@
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.17",
+    "jasmine-core": "^4.6.0",
+    "karma": "^6.4.1",
+    "karma-chrome-launcher": "^3.1.1",
+    "karma-firefox-launcher": "^2.1.2",
+    "karma-jasmine": "^5.1.0",
+    "karma-requirejs": "^1.1.0",
     "typescript": "^5.0.4"
   },
   "dependencies": {
