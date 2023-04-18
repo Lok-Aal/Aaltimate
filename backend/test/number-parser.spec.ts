@@ -3,8 +3,9 @@ import { PhoneNumber } from "../src/utils/types";
 
 
 describe('parsePhoneNumber', () => {
-    it('parses Number into slices ', () => { 
+    it('parses Number into slices ', () => {
+        let telephone:PhoneNumber = {landesvorwahl:"34",durchwahl:"4343",hauptwahl:"3434",ortsvorwahl:"3443"}
       expect(parsePhoneNumber("3429238432"))
-          .toEqual([232,323,2323,32]);
+          .toEqual(telephone);
     });
   });
