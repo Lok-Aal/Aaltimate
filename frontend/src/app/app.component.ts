@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { TelephoneNumber } from 'src/types/TelephoneNumber';
+import { TelephoneService } from './services/telephone.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'frontend';
+
+
+  parsedNumber?: TelephoneNumber
+  inputNumber = '';
+
+  constructor(private telephoneService: TelephoneService) {
+
+  }
 }
