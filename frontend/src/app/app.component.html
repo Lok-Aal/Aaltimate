@@ -17,7 +17,7 @@
           <span class="p-inputgroup-addon">
             <i class="pi pi-phone"></i>
           </span>
-          <input pInputText name="inputNumber" [(ngModel)]="inputNumber" placeholder="Telefonnummer" />
+          <input pInputText name="inputNumber" [(ngModel)]="inputNumber" (keyup)="validateNumber($event)" placeholder="Telefonnummer" />
         </div>
         <p-divider></p-divider>
           <p-button (click)="parseNumber()" label="Parse" class="p-button-raised p-button-rounded p-button-success md-5"></p-button>

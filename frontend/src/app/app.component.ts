@@ -10,23 +10,32 @@ import { TelephoneService } from './services/telephone.service';
 export class AppComponent {
 
 
-  parsedNumbers: TelephoneNumber[] = [
-    {
-      landesvorwahl: '49',
-      ortsvorwahl: '7151',
-      hauptwahl: '2058990',
-    }
-  ];
+  parsedNumbers: TelephoneNumber[] = [];
   inputNumber = '';
+  oldValue = '';
+  telephoneRegex = RegExp("^\\+?[ 0-9\\/()\\[\\]-]*$");
 
   constructor(private telephoneService: TelephoneService) {
 
   }
 
+  validateNumber(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    if((this.telephoneRegex).test(value)){
+      this.inputNumber = value;
+     }else{
+       this.inputNumber = this.oldValue;
+      }
+    this.oldValue = this.inputNumber;
+    }
+
   parseNumber() {
-    console.log(this.inputNumber);
+
+    if((this.telephoneRegex).test(this.inputNumber)){
+
     this.telephoneService.parseNumber(this.inputNumber).subscribe((parsedNumber: TelephoneNumber) => {
       this.parsedNumbers.push(parsedNumber);
     });
+  }
   }
 }
