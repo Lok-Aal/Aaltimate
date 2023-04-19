@@ -12,8 +12,12 @@ export default class AbstractCountryNumberParser implements CountryNumberParser 
     };
 
     separators = [" ", "-", "/"];
-    separatorsWithSpaceRegex = new RegExp(`[${this.separators.join("")}]`);
-    separatorRegex = new RegExp(`[${this.separators.splice(1).join("")}]`);
+    separatorsRegex = new RegExp(`[${this.separators.join("")}]`, `gm`);
+
+    enclosures = ["(", ")", "[", "]"];
+    enclosuresRegex = new RegExp(`[${this.enclosures.join("\\")}]`, `gm`);
+
+    maxDurchwahlLength = 3;
 
     constructor(protected restNumber: string){}
 

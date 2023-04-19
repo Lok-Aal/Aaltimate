@@ -1,16 +1,20 @@
 import { CountryParserMap } from "../countryNumberParser/country-number-parser";
 import WrongCountryError from "../errors/wrong-country-error";
-import { country_codes } from "./dicts";
+import { e164toIso3166 } from "./dicts";
 import { PhoneNumber } from "./types";
 
 export function parsePhoneNumber(number: string): PhoneNumber | null {
 
     
 
-    number = number
-        .replace(/[\s/\-\(\)]+/g, " ")  // replace seperators with single spaces
-        .trim()
-        .replace(/^\+/, "00");      // replace beginning + with 00
+    // Ländervorwahl can be enclosed in brackets or parantheses replace them with nothing if they are there
+
+    if(number.startsWith("(") || number.startsWith("[")) {
+        number = number.replace(/[\(\[]/g, "").replace(/[\)\]]/g, "");
+    }
+    
+
+    number = number.trim().replace(/^\+/g, "00"); // replace beginning + with 00
 
     // If the number starts with a single 0 it is a local number and we should replace the start with 0049
 
@@ -19,8 +23,8 @@ export function parsePhoneNumber(number: string): PhoneNumber | null {
         number = "0049" + number;
     }
 
-    console.log(`number: ${number}`);
     let country_match = countryMatch(number);
+
 
     if (!country_match) {
         return null;
@@ -29,6 +33,7 @@ export function parsePhoneNumber(number: string): PhoneNumber | null {
     let [country_code, number_rest] = country_match;
 
     let countryParser = CountryParserMap[country_code];
+
 
     if(countryParser === undefined) {
         throw new WrongCountryError(country_code);
@@ -44,7 +49,7 @@ function countryMatch(number: string): [string, string] | null {
 
     if (number.startsWith("00")) {
         for (let length of [1, 2, 3]) {
-            if (number.slice(2, 2 + length) in country_codes) {
+            if (number.slice(2, 2 + length) in e164toIso3166) {
                 country_code = number.slice(2, 2 + length)
                 break;
             }

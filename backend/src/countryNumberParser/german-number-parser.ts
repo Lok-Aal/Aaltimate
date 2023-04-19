@@ -27,18 +27,19 @@ export default class GermanNumberParser extends AbstractCountryNumberParser{
         if(this.restNumber.startsWith("(")) {
             let index = this.restNumber.indexOf(")");
             if(index === -1) {
-                throw new WrongFormatError(this.restNumber);
+                throw new WrongFormatError(`${this.restNumber} (missing closing bracket in Ortsvorwahl)`);
             }
-            this.phoneNumber.ortsvorwahl = this.restNumber.slice(index + 1);
-            this.restNumber = this.restNumber.slice(0, index + 1); // Remove the part that was matched so the next function can work with the next substring
+            this.phoneNumber.ortsvorwahl = this.restNumber.slice(1,index);
+            this.restNumber = this.restNumber.slice(index + 1, this.restNumber.length); // Remove the part that was matched so the next function can work with the next substring
         }else{
             if(this.restNumber.startsWith("0")) {
                 this.restNumber = this.restNumber.slice(1);
             }
 
+            let match = false;
             for(let length of vorwahlLenghts) {
                 const subNumber = this.restNumber.slice(0, length);
-                const match = deutscheVorwahlen[subNumber] !== undefined;
+                match = match || (deutscheVorwahlen[subNumber] !== undefined);
 
                 // Since the numbers are prefix numbers we can be sure that we found the vorwahl
                 if(match) {
@@ -46,6 +47,10 @@ export default class GermanNumberParser extends AbstractCountryNumberParser{
                     this.restNumber = this.restNumber.slice(length);
                     break;
                 }
+            }
+
+            if(!match) {
+                throw new WrongFormatError(`${this.restNumber} (Ortsvorwahl not found in dict)`);
             }
         }
 
@@ -61,7 +66,17 @@ export default class GermanNumberParser extends AbstractCountryNumberParser{
 
     parseHauptwahl(): string {
 
-        const hasSeparation = this.separatorsWithSpaceRegex.test(this.restNumber);
+
+        // Hauptwahl can be enclosed in brackets or parentheses
+        const hasEnclosure = this.enclosuresRegex.test(this.restNumber);
+
+        if(hasEnclosure) {
+            this.restNumber = this.restNumber.replace(this.enclosuresRegex, "").trim();
+        }
+
+
+
+        const hasSeparation = this.separatorsRegex.test(this.restNumber);
 
         if(!hasSeparation){
             this.phoneNumber.hauptwahl = this.restNumber;
@@ -70,10 +85,19 @@ export default class GermanNumberParser extends AbstractCountryNumberParser{
         }
 
         // Filter because the number could be seperated by a symbol and a space (e.g. 123 456 / 789)
-        const numberSplit = this.restNumber.split(this.separatorsWithSpaceRegex).filter((s) => s !== "");	
+        const numberSplit = this.restNumber.split(this.separatorsRegex).filter((s) => s !== "");	
 
         if(numberSplit.length !== 2) {
-            throw new WrongFormatError(this.restNumber);
+            // The separation is unambiguous. There are more than 2 substrings so we need to check the substrings at the end of the whole string is a durchwahl
+            const lastSubstring = numberSplit[numberSplit.length - 1];
+            if(lastSubstring.length > this.maxDurchwahlLength) {
+                // Its such a weird sidecase (according to the requirements that we just ignore the separator)
+                return this.phoneNumber.hauptwahl = numberSplit.slice(0, numberSplit.length - 1).join("");
+            }else{
+                // The last substring is a durchwahl
+                this.restNumber = lastSubstring;
+                return this.phoneNumber.hauptwahl = numberSplit.slice(0, numberSplit.length - 2).join("");
+            }
         }   
 
         this.phoneNumber.hauptwahl = numberSplit[0];
