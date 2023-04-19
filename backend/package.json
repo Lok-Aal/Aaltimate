@@ -5,7 +5,8 @@
   "main": "src/app.ts",
   "scripts": {
     "start": "npx tsc && node dist/app.js",
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'test/**/*.ts'"
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'test/**/*.ts'",
+    "coverage": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' nyc mocha -r ts-node/register 'test/**/*.ts'"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +18,7 @@
     "chai": "^4.3.7",
     "mocha": "^10.2.0",
     "ts-node": "^10.9.1",
+    "nyc": "^15.1.0",
     "typescript": "^5.0.4"
   },
   "dependencies": {
