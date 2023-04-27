@@ -3,6 +3,9 @@ import { parsePhoneNumber } from "../src/utils/number-parser";
 import { PhoneNumber } from "../src/utils/types";
 import WrongCountryError from "../src/errors/wrong-country-error";
 import WrongFormatError from "../src/errors/wrong-format-error";
+import { CountryParserMap } from "../src/countryNumberParser/country-number-parser";
+import GermanNumberParser from "../src/countryNumberParser/german-number-parser";
+import { type } from "os";
 
 //das sollte alles gehen
 /*
@@ -111,9 +114,10 @@ describe('parsePhoneNumber fail-tests', ()=>{
     expect(() => parsePhoneNumber("+49 23898 A93849"))
       .to.throw(WrongFormatError);
   });
+});
 
-  
-
-
-
+describe('choose correct parser', () => {
+  it('GermanNumberParser', () => {
+    expect(CountryParserMap["49"].name).to.equal("GermanNumberParser");
+  });
 });
