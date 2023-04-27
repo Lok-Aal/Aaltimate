@@ -13,7 +13,7 @@ export class AppComponent {
   parsedNumbers: TelephoneNumber[] = [];
   inputNumber = '';
   oldValue = '';
-  telephoneRegex = RegExp("^\\+?[ 0-9\\/()\\[\\]-]*$");
+  telephoneRegex = RegExp("[+ 0-9\\/()\\[\\]-]*$");
 
   constructor(private telephoneService: TelephoneService) {
 
@@ -34,6 +34,7 @@ export class AppComponent {
     if((this.telephoneRegex).test(this.inputNumber)){
 
     this.telephoneService.parseNumber(this.inputNumber).subscribe((parsedNumber: TelephoneNumber) => {
+      console.log(parsedNumber);
       this.parsedNumbers.push(parsedNumber);
     });
   }

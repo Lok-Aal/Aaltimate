@@ -1,19 +1,28 @@
 import { CountryParserMap } from "../countryNumberParser/country-number-parser";
 import WrongCountryError from "../errors/wrong-country-error";
+import WrongFormatError from "../errors/wrong-format-error";
 import { e164toIso3166 } from "./dicts";
 import { PhoneNumber } from "./types";
 
 export function parsePhoneNumber(number: string): PhoneNumber | null {
 
     
+    let validCharacters = new RegExp(`^[0-9\\+\\(\\)\\[\\]\\-\\/\\s]+$`, `gm`);
+    if(!validCharacters.test(number)){
+        throw new WrongFormatError(`${number} contains invalid characters`);
+    }
+
 
     // Ländervorwahl can be enclosed in brackets or parantheses replace them with nothing if they are there
 
     if(number.startsWith("(") || number.startsWith("[")) {
         number = number.replace(/[\(\[]/g, "").replace(/[\)\]]/g, "");
     }
-    
 
+    if(!number.startsWith("+") && !number.startsWith("0")) {
+        throw new WrongFormatError(`${number} is missing a country code or leading zero`);
+    }
+    
     number = number.trim().replace(/^\+/g, "00"); // replace beginning + with 00
 
     // If the number starts with a single 0 it is a local number and we should replace the start with 0049

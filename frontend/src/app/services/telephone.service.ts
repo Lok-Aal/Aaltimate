@@ -14,7 +14,9 @@ export class TelephoneService {
 
   parseNumber(number : string) : Observable<TelephoneNumber>{
 
-    return this.httpClient.get<TelephoneNumber>(`${environment.backendUrl}${environment.endpoints.telephone}?number=${number}`);
+
+
+    return this.httpClient.get<TelephoneNumber>(`${environment.backendUrl}${environment.endpoints.telephone}`, {params: {number: number}});
 
   }
 
